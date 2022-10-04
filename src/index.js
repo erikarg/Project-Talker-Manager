@@ -20,12 +20,19 @@ app.listen(PORT, () => {
 
 const pathTalker = path.resolve(
   __dirname,
-  '..',
-  'src',
-  'talker.json'
+  './talker.json',
 );
 
 app.get('/talker', async (req, res) => {
-  const talker = JSON.parse(await fs.readFile(pathTalker, "utf8"));
+  const talker = JSON.parse(await fs.readFile(pathTalker, 'utf8'));
   return res.status(200).json(talker);
-})
+});
+
+app.get('/talker/:id', async (req, res) => {
+  const talkers = JSON.parse(await fs.readFile(pathTalker, 'utf8'));
+  const index = talkers.find(({ id }) => id === Number(req.params.id));
+  if (!index) {
+    return res.status(404).send({ message: 'Pessoa palestrante não encontrada' });
+  }
+  return res.status(200).json(index);
+});
