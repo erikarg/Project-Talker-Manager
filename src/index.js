@@ -2,7 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 const path = require('path');
-const tokenGenerator = require('./utils/tokenGenerator');
+const tokenGenerator = require('./middlewares/tokenGenerator');
+const validateEmail = require('./middlewares/validateEmail');
+const validatePassword = require('./middlewares/validatePassword');
 
 const app = express();
 app.use(bodyParser.json());
@@ -38,7 +40,10 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(200).json(index);
 });
 
-app.post('/login', (req, res) => {
+app.post('/login',
+  validateEmail,
+  validatePassword,
+  (req, res) => {
   const token = tokenGenerator();
   res.status(200).json({ token });
 });
