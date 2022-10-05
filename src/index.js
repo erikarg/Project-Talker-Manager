@@ -59,8 +59,8 @@ app.post('/talker',
   validateName,
   validateAge,
   validateTalk,
-  validateRate,
   validateWatchedAt,
+  validateRate,
   async (req, res) => {
   const talkersList = JSON.parse(await fs.readFile(pathTalker, 'utf-8'));
   const idGenerator = talkersList.length + 1;
@@ -68,4 +68,21 @@ app.post('/talker',
   talkersList.push(body);
   await fs.writeFile(pathTalker, JSON.stringify(talkersList));
   res.status(201).json(body);
+});
+
+app.put('/talker/:id',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
+  async (req, res) => {
+  const id = Number(req.params.id);
+  const person = { id, ...req.body };
+  const talkersList = JSON.parse(await fs.readFile(pathTalker, 'utf-8'));
+  const index = talkersList.findIndex((position) => position.id === Number(id));
+  talkersList[index] = person;
+  await fs.writeFile(pathTalker, JSON.stringify(talkersList));
+  res.status(200).json(person);
 });
