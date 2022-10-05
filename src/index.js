@@ -5,6 +5,12 @@ const path = require('path');
 const tokenGenerator = require('./middlewares/tokenGenerator');
 const validateEmail = require('./middlewares/validateEmail');
 const validatePassword = require('./middlewares/validatePassword');
+const validateName = require('./middlewares/validateName');
+const validateAge = require('./middlewares/validateAge');
+const validateTalk = require('./middlewares/validateTalk');
+const validateRate = require('./middlewares/validateRate');
+const validateWatchedAt = require('./middlewares/validateWatchedAt');
+const validateToken = require('./middlewares/validateToken');
 
 const app = express();
 app.use(bodyParser.json());
@@ -43,7 +49,23 @@ app.get('/talker/:id', async (req, res) => {
 app.post('/login',
   validateEmail,
   validatePassword,
-  (req, res) => {
+  (_req, res) => {
   const token = tokenGenerator();
   res.status(200).json({ token });
+});
+
+app.post('/talker',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateRate,
+  validateWatchedAt,
+  async (req, res) => {
+  const talkersList = JSON.parse(await fs.readFile(pathTalker, 'utf-8'));
+  const idGenerator = talkersList.length + 1;
+  const body = { id: idGenerator, ...req.body };
+  talkersList.push(body);
+  await fs.writeFile(pathTalker, JSON.stringify(talkersList));
+  res.status(201).json(body);
 });
