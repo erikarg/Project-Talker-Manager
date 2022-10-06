@@ -32,14 +32,21 @@ const pathTalker = path.resolve(
   './talker.json',
 );
 
-app.get('/talker', async (req, res) => {
-  const talker = JSON.parse(await fs.readFile(pathTalker, 'utf8'));
-  return res.status(200).json(talker);
+app.get('/talker', async (_req, res) => {
+  const talkersList = JSON.parse(await fs.readFile(pathTalker, 'utf8'));
+  return res.status(200).json(talkersList);
 });
 
+app.get('/talker/search', validateToken, async (req, res) => {
+  const talkersList = JSON.parse(await fs.readFile(pathTalker, 'utf8'));
+  const { q } = req.query;
+  const filteredList = talkersList.filter((search) => search.name.includes(q));
+    res.status(200).json(filteredList);
+  });
+
 app.get('/talker/:id', async (req, res) => {
-  const talkers = JSON.parse(await fs.readFile(pathTalker, 'utf8'));
-  const index = talkers.find(({ id }) => id === Number(req.params.id));
+  const talkersList = JSON.parse(await fs.readFile(pathTalker, 'utf8'));
+  const index = talkersList.find(({ id }) => id === Number(req.params.id));
   if (!index) {
     return res.status(404).send({ message: 'Pessoa palestrante não encontrada' });
   }
