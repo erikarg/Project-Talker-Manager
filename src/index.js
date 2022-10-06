@@ -86,3 +86,12 @@ app.put('/talker/:id',
   await fs.writeFile(pathTalker, JSON.stringify(talkersList));
   res.status(200).json(person);
 });
+
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  const id = Number(req.params.id);
+  const talkersList = JSON.parse(await fs.readFile(pathTalker, 'utf-8'));
+  const index = talkersList.findIndex((position) => position.id === Number(id));
+  talkersList.splice(index, 1);
+  await fs.writeFile(pathTalker, JSON.stringify(talkersList));
+  res.sendStatus(204);
+  });
