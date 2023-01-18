@@ -14,8 +14,9 @@ Construir uma aplicação de cadastro de palestrantes em que é possível cadast
 
 ## Stacks utilizadas
 
-* **Back-end:** Express, JavaScript, Node.js
+* **Back-end:** Express, Node.js
 * **Plataforma:** Docker
+* **Linguagem:** JavaScript
 
 ## Rodando localmente
 
@@ -65,8 +66,9 @@ Build a speaker registration application in which it's possible to register, vie
 
 ## Stacks
 
-* **Back-end:** Express, JavaScript, Node.js
+* **Back-end:** Express, Node.js
 * **Platform:** Docker
+* **Language:** JavaScript
 
 ## Running the application locally
 
